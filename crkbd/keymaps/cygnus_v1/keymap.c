@@ -16,7 +16,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-
+// qmk compile -kb crkbd -km cygnus_v1 -e CONVERT_TO=rp2040_ce -e EEPROM_CLEAR=yes
 #include QMK_KEYBOARD_H
 
 // Layer definitions
@@ -87,7 +87,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
         XXXXXXX, KC_EQL, KC_LBRC, KC_RBRC, KC_LPRN, KC_RPRN, CTRL_H, CTRL_J, CTRL_K, CTRL_L, KC_SCLN, XXXXXXX,
         //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-        XXXXXXX, KC_GRV, KC_BSLS, KC_PIPE, KC_TILD, KC_DQT, KC_PLUS, KC_COMM, KC_DOT, KC_SLSH, LALT_T(KC_QUOT), XXXXXXX,
+        XXXXXXX, KC_GRV, KC_BSLS, KC_PIPE, KC_TILD, KC_DQT, KC_PLUS, KC_COMM, KC_QUOT, KC_DOT, LALT_T(KC_SLSH), XXXXXXX,
         //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
         LCTL_T(KC_TAB), KC_LSFT, MO(_ADJUST), _______, KC_BSPC, KC_LCMD
         //`--------------------------'  `--------------------------'
