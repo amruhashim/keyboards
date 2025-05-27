@@ -20,7 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include QMK_KEYBOARD_H
 
 // Layer definitions
-enum layer_names { _BASE = 0, _LOWER, _RAISE, _FUNCTION, _ADJUST };
+enum layer_names { _BASE = 0, _LOWER, _RAISE, _FUNCTION, _TERMINAL };
 
 // Custom keycodes
 enum custom_keycodes {
@@ -39,6 +39,38 @@ enum custom_keycodes {
     SYM_8, // * normally, 8 when shifted
     SYM_9, // ( normally, 9 when shifted
     SYM_0, // ) normally, 0 when shifted
+
+    // Terminal control keycodes
+    TERM_NEW_TAB,
+    TERM_CLOSE_TAB,
+    TERM_CLOSE_WIN,
+    TERM_NEXT_TAB,
+    TERM_PREV_TAB,
+    TERM_TAB_1,
+    TERM_TAB_2,
+    TERM_TAB_3,
+    TERM_TAB_4,
+    TERM_TAB_5,
+    TERM_SPLIT_H,
+    TERM_SPLIT_V,
+    TERM_WIN_LEFT,
+    TERM_WIN_DOWN,
+    TERM_WIN_UP,
+    TERM_WIN_RIGHT,
+    TERM_NEXT_WIN,
+    TERM_PREV_WIN,
+    TERM_ZOOM,
+    TERM_LAYOUT,
+    TERM_FULLSCREEN,
+    TERM_SCROLL_UP,
+    TERM_SCROLL_DN,
+    TERM_HOME,
+    TERM_END,
+    TERM_SCROLLBACK,
+    TERM_CLEAR,
+    TERM_FONT_INC,
+    TERM_FONT_DEC,
+    TERM_FONT_RST,
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -53,7 +85,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
         XXXXXXX, KC_A, KC_S, KC_D, KC_F, KC_G, KC_H, KC_J, KC_K, KC_L, KC_SCLN, XXXXXXX,
         //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-        XXXXXXX, KC_Z, KC_X, KC_C, KC_V, KC_B, KC_N, KC_M, KC_COMM, KC_DOT, LALT_T(KC_SLSH), XXXXXXX,
+        XXXXXXX, KC_Z, KC_X, KC_C, KC_V, KC_B, KC_N, KC_M, KC_COMM, KC_DOT, KC_SLSH, XXXXXXX,
         //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
         LCTL_T(KC_TAB), KC_LSFT, LT(_LOWER, KC_ENT), LT(_RAISE, KC_SPC), KC_BSPC, LCMD_T(KC_ESC)
         //`--------------------------'  `--------------------------'
@@ -89,7 +121,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
         XXXXXXX, KC_GRV, KC_BSLS, KC_PIPE, KC_TILD, KC_DQT, KC_PLUS, KC_COMM, KC_QUOT, KC_DOT, LALT_T(KC_SLSH), XXXXXXX,
         //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-        LCTL_T(KC_TAB), KC_LSFT, MO(_ADJUST), _______, KC_BSPC, KC_LCMD
+        LCTL_T(KC_TAB), KC_LSFT, MO(_TERMINAL), _______, KC_BSPC, KC_LCMD
         //`--------------------------'  `--------------------------'
         ),
 
@@ -109,17 +141,19 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         ),
 
     // ============================================================================
-    // ADJUST LAYER - System Controls and Keyboard Settings
+    // TERMINAL LAYER - Direct Terminal Control (LOWER + RAISE)
+    // All keys send complete shortcuts - no modifiers needed!
+    // Left hand: Window/Tab/Split management | Right hand: Navigation
     // ============================================================================
-    [_ADJUST] = LAYOUT_split_3x6_3(
+    [_TERMINAL] = LAYOUT_split_3x6_3(
         //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_SYSTEM_SLEEP, XXXXXXX,
+        XXXXXXX, TERM_TAB_1, TERM_TAB_2, TERM_TAB_3, TERM_TAB_4, TERM_TAB_5, TERM_SCROLL_UP, TERM_FONT_INC, TERM_FONT_DEC, TERM_FONT_RST, TERM_CLEAR, XXXXXXX,
         //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, LCTL(LSFT(KC_PWR)), XXXXXXX,
+        XXXXXXX, TERM_NEW_TAB, TERM_SPLIT_H, TERM_SPLIT_V, TERM_NEXT_TAB, TERM_PREV_TAB, TERM_WIN_LEFT, TERM_WIN_DOWN, TERM_WIN_UP, TERM_WIN_RIGHT, TERM_SCROLL_DN, XXXXXXX,
         //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+        XXXXXXX, TERM_ZOOM, TERM_CLOSE_WIN, TERM_CLOSE_TAB, TERM_FULLSCREEN, TERM_LAYOUT, TERM_HOME, TERM_PREV_WIN, TERM_NEXT_WIN, TERM_END, TERM_SCROLLBACK, XXXXXXX,
         //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-        TG(_FUNCTION), _______, XXXXXXX, KC_SPC, KC_BSPC, KC_RSFT
+        TG(_FUNCTION), _______, _______, _______, _______, KC_RSFT
         //`--------------------------'  `--------------------------'
         )};
 
@@ -127,7 +161,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 // Layer State Management
 // ============================================================================
 layer_state_t layer_state_set_user(layer_state_t state) {
-    return update_tri_layer_state(state, _LOWER, _RAISE, _ADJUST);
+    return update_tri_layer_state(state, _LOWER, _RAISE, _TERMINAL);
 }
 
 // ============================================================================
@@ -327,6 +361,187 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             }
             return false;
 
+        // Terminal control keys - Send complete Kitty shortcuts
+        case TERM_NEW_TAB:
+            if (record->event.pressed) {
+                tap_code16(LCMD(KC_T));
+            }
+            return false;
+
+        case TERM_CLOSE_TAB:
+            if (record->event.pressed) {
+                tap_code16(LCMD(KC_W));
+            }
+            return false;
+
+        case TERM_CLOSE_WIN:
+            if (record->event.pressed) {
+                tap_code16(LCMD(LSFT(KC_W)));
+            }
+            return false;
+
+        case TERM_NEXT_TAB:
+            if (record->event.pressed) {
+                tap_code16(LCMD(LSFT(KC_RBRC)));
+            }
+            return false;
+
+        case TERM_PREV_TAB:
+            if (record->event.pressed) {
+                tap_code16(LCMD(LSFT(KC_LBRC)));
+            }
+            return false;
+
+        case TERM_TAB_1:
+            if (record->event.pressed) {
+                tap_code16(LCMD(KC_1));
+            }
+            return false;
+
+        case TERM_TAB_2:
+            if (record->event.pressed) {
+                tap_code16(LCMD(KC_2));
+            }
+            return false;
+
+        case TERM_TAB_3:
+            if (record->event.pressed) {
+                tap_code16(LCMD(KC_3));
+            }
+            return false;
+
+        case TERM_TAB_4:
+            if (record->event.pressed) {
+                tap_code16(LCMD(KC_4));
+            }
+            return false;
+
+        case TERM_TAB_5:
+            if (record->event.pressed) {
+                tap_code16(LCMD(KC_5));
+            }
+            return false;
+
+        case TERM_SPLIT_H:
+            if (record->event.pressed) {
+                tap_code16(LCMD(KC_D));
+            }
+            return false;
+
+        case TERM_SPLIT_V:
+            if (record->event.pressed) {
+                tap_code16(LCMD(LSFT(KC_D)));
+            }
+            return false;
+
+        case TERM_WIN_LEFT:
+            if (record->event.pressed) {
+                tap_code16(LCMD(KC_H));
+            }
+            return false;
+
+        case TERM_WIN_DOWN:
+            if (record->event.pressed) {
+                tap_code16(LCMD(KC_J));
+            }
+            return false;
+
+        case TERM_WIN_UP:
+            if (record->event.pressed) {
+                tap_code16(LCMD(KC_K));
+            }
+            return false;
+
+        case TERM_WIN_RIGHT:
+            if (record->event.pressed) {
+                tap_code16(LCMD(KC_L));
+            }
+            return false;
+
+        case TERM_NEXT_WIN:
+            if (record->event.pressed) {
+                tap_code16(LCMD(KC_RBRC));
+            }
+            return false;
+
+        case TERM_PREV_WIN:
+            if (record->event.pressed) {
+                tap_code16(LCMD(KC_LBRC));
+            }
+            return false;
+
+        case TERM_ZOOM:
+            if (record->event.pressed) {
+                tap_code16(LCMD(KC_Z));
+            }
+            return false;
+
+        case TERM_LAYOUT:
+            if (record->event.pressed) {
+                tap_code16(LCMD(KC_SPC));
+            }
+            return false;
+
+        case TERM_FULLSCREEN:
+            if (record->event.pressed) {
+                tap_code16(LCMD(KC_ENT));
+            }
+            return false;
+
+        case TERM_SCROLL_UP:
+            if (record->event.pressed) {
+                tap_code16(LCMD(KC_U));
+            }
+            return false;
+
+        case TERM_SCROLL_DN:
+            if (record->event.pressed) {
+                tap_code16(LCMD(KC_D));
+            }
+            return false;
+
+        case TERM_HOME:
+            if (record->event.pressed) {
+                tap_code16(LCMD(KC_HOME));
+            }
+            return false;
+
+        case TERM_END:
+            if (record->event.pressed) {
+                tap_code16(LCMD(KC_END));
+            }
+            return false;
+
+        case TERM_SCROLLBACK:
+            if (record->event.pressed) {
+                tap_code16(LCMD(KC_SLSH));
+            }
+            return false;
+
+        case TERM_CLEAR:
+            if (record->event.pressed) {
+                tap_code16(LCMD(KC_K));
+            }
+            return false;
+
+        case TERM_FONT_INC:
+            if (record->event.pressed) {
+                tap_code16(LCMD(KC_PLUS));
+            }
+            return false;
+
+        case TERM_FONT_DEC:
+            if (record->event.pressed) {
+                tap_code16(LCMD(KC_MINS));
+            }
+            return false;
+
+        case TERM_FONT_RST:
+            if (record->event.pressed) {
+                tap_code16(LCMD(KC_0));
+            }
+            return false;
+
         default:
             return true;
     }
@@ -337,6 +552,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 // ============================================================================
 #ifdef ENCODER_MAP_ENABLE
 const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][NUM_DIRECTIONS] = {
-    [_BASE] = {ENCODER_CCW_CW(KC_VOLD, KC_VOLU)}, [_LOWER] = {ENCODER_CCW_CW(KC_PGUP, KC_PGDN)}, [_RAISE] = {ENCODER_CCW_CW(KC_BRID, KC_BRIU)}, [_FUNCTION] = {ENCODER_CCW_CW(KC_MPRV, KC_MNXT)}, [_ADJUST] = {ENCODER_CCW_CW(KC_VOLD, KC_VOLU)},
+    [_BASE] = {ENCODER_CCW_CW(KC_VOLD, KC_VOLU)}, [_LOWER] = {ENCODER_CCW_CW(KC_PGUP, KC_PGDN)}, [_RAISE] = {ENCODER_CCW_CW(KC_BRID, KC_BRIU)}, [_FUNCTION] = {ENCODER_CCW_CW(KC_MPRV, KC_MNXT)}, [_TERMINAL] = {ENCODER_CCW_CW(KC_VOLD, KC_VOLU)},
 };
 #endif
