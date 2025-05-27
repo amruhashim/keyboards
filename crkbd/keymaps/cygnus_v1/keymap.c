@@ -20,7 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include QMK_KEYBOARD_H
 
 // Layer definitions
-enum layer_names { _BASE = 0, _LOWER, _RAISE, _FUNCTION };
+enum layer_names { _BASE = 0, _LOWER, _RAISE, _FUNCTION, _TERMINAL };
 
 // Custom keycodes
 enum custom_keycodes {
@@ -39,18 +39,128 @@ enum custom_keycodes {
     SYM_8, // * normally, 8 when shifted
     SYM_9, // ( normally, 9 when shifted
     SYM_0, // ) normally, 0 when shifted
+
+    // Terminal control keycodes (fixed for macOS)
+    TERM_NEW_TAB,
+    TERM_CLOSE_TAB,
+    TERM_CLOSE_WIN,
+    TERM_NEXT_TAB,
+    TERM_PREV_TAB,
+    TERM_TAB_1,
+    TERM_TAB_2,
+    TERM_TAB_3,
+    TERM_TAB_4,
+    TERM_TAB_5,
+    TERM_SPLIT_H,
+    TERM_SPLIT_V,
+    TERM_WIN_LEFT,
+    TERM_WIN_DOWN,
+    TERM_WIN_UP,
+    TERM_WIN_RIGHT,
+    TERM_NEXT_WIN,
+    TERM_PREV_WIN,
+    TERM_ZOOM,
+    TERM_FULLSCREEN,
+    TERM_SCROLL_UP,
+    TERM_SCROLL_DN,
+    TERM_HOME,
+    TERM_END,
+    TERM_CLEAR_LINE,
+    TERM_CLEAR_SCRN,
+    TERM_FONT_INC,
+    TERM_FONT_DEC,
+    TERM_FONT_RST,
 };
 
-const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {[_BASE] = LAYOUT_split_3x6_3(XXXXXXX, KC_Q, KC_W, KC_E, KC_R, KC_T, KC_Y, KC_U, KC_I, KC_O, P_SPOTLIGHT, XXXXXXX, XXXXXXX, KC_A, KC_S, KC_D, KC_F, KC_G, KC_H, KC_J, KC_K, KC_L, KC_SCLN, XXXXXXX, XXXXXXX, KC_Z, KC_X, KC_C, KC_V, KC_B, KC_N, KC_M, KC_COMM, KC_DOT, KC_SLSH, XXXXXXX, LCTL_T(KC_TAB), KC_LSFT, LT(_LOWER, KC_ENT), LT(_RAISE, KC_SPC), KC_BSPC, LCMD_T(KC_ESC)),
+const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
+    // ============================================================================
+    // BASE LAYER - QWERTY with Alt access and ergonomic improvements
+    // Left thumb: TAB → SHIFT → ENTER | Right thumb: SPACE ← BACKSPACE ← CMD+ESC
+    // P key: Tap for P, Hold for CMD+SPACE (Spotlight)
+    // ============================================================================
+    [_BASE] = LAYOUT_split_3x6_3(
+        //,-----------------------------------------------------.                    ,-----------------------------------------------------.
+        XXXXXXX, KC_Q, KC_W, KC_E, KC_R, KC_T, KC_Y, KC_U, KC_I, KC_O, P_SPOTLIGHT, XXXXXXX,
+        //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
+        XXXXXXX, KC_A, KC_S, KC_D, KC_F, KC_G, KC_H, KC_J, KC_K, KC_L, KC_SCLN, XXXXXXX,
+        //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
+        XXXXXXX, KC_Z, KC_X, KC_C, KC_V, KC_B, KC_N, KC_M, KC_COMM, KC_DOT, KC_SLSH, XXXXXXX,
+        //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
+        LCTL_T(KC_TAB), KC_LSFT, LT(_LOWER, KC_ENT), LT(_RAISE, KC_SPC), KC_BSPC, LCMD_T(KC_ESC)
+        //`--------------------------'  `--------------------------'
+        ),
 
-                                                              [_LOWER] = LAYOUT_split_3x6_3(XXXXXXX, KC_1, KC_2, KC_3, KC_4, KC_5, KC_MS_BTN1, KC_MS_WH_UP, KC_MS_BTN2, KC_DEL, KC_INS, XXXXXXX, XXXXXXX, KC_6, KC_7, KC_8, KC_9, KC_0, KC_MS_LEFT, KC_MS_DOWN, KC_MS_UP, KC_MS_RIGHT, KC_PGUP, XXXXXXX, XXXXXXX, LCMD(KC_Z), LCMD(KC_X), LCMD(KC_C), LCMD(KC_V), LCMD(KC_B), KC_MS_BTN3, KC_MS_WH_DOWN, KC_HOME, KC_END, KC_PGDN, XXXXXXX, KC_LCTL, KC_LSFT, _______, _______, KC_BSPC, KC_LCMD),
+    // ============================================================================
+    // LOWER LAYER - Numbers & Navigation for Coding
+    // ============================================================================
+    [_LOWER] = LAYOUT_split_3x6_3(
+        //,-----------------------------------------------------.                    ,-----------------------------------------------------.
+        XXXXXXX, KC_1, KC_2, KC_3, KC_4, KC_5, KC_MS_BTN1, KC_MS_WH_UP, KC_MS_BTN2, KC_DEL, KC_INS, XXXXXXX,
+        //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
+        XXXXXXX, KC_6, KC_7, KC_8, KC_9, KC_0, KC_MS_LEFT, KC_MS_DOWN, KC_MS_UP, KC_MS_RIGHT, KC_PGUP, XXXXXXX,
+        //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
+        XXXXXXX, LCMD(KC_Z), LCMD(KC_X), LCMD(KC_C), LCMD(KC_V), LCMD(KC_B), KC_MS_BTN3, KC_MS_WH_DOWN, KC_HOME, KC_END, KC_PGDN, XXXXXXX,
+        //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
+        KC_LCTL, KC_LSFT, _______, _______, KC_BSPC, KC_LCMD
+        //`--------------------------'  `--------------------------'
+        ),
 
-                                                              [_RAISE] = LAYOUT_split_3x6_3(XXXXXXX, SYM_1, SYM_2, SYM_3, SYM_4, SYM_5, SYM_6, SYM_7, SYM_8, SYM_9, SYM_0, XXXXXXX, XXXXXXX, KC_EQL, KC_LBRC, KC_RBRC, KC_LPRN, KC_RPRN, CTRL_H, CTRL_J, CTRL_K, CTRL_L, KC_SCLN, XXXXXXX, XXXXXXX, KC_GRV, KC_BSLS, KC_PIPE, KC_TILD, KC_DQT, KC_PLUS, KC_COMM, KC_QUOT, KC_DOT, LALT_T(KC_SLSH), XXXXXXX, LCTL_T(KC_TAB), KC_LSFT, _______, _______, KC_BSPC, KC_LCMD),
+    // ============================================================================
+    // RAISE LAYER - Programming Symbols with Numbers on Shift
+    // Top row: !@#$%^&*() - when shifted gives 1234567890
+    // Punctuation: ,.;/ naturally shift to <>:? (NO duplicate symbols)
+    // Backtick and tilde as separate keys in good positions
+    // HJKL: Normal symbols, or arrow keys when Ctrl is held
+    // ============================================================================
+    [_RAISE] = LAYOUT_split_3x6_3(
+        //,-----------------------------------------------------.                    ,-----------------------------------------------------.
+        XXXXXXX, SYM_1, SYM_2, SYM_3, SYM_4, SYM_5, SYM_6, SYM_7, SYM_8, SYM_9, SYM_0, XXXXXXX,
+        //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
+        XXXXXXX, KC_EQL, KC_LBRC, KC_RBRC, KC_LPRN, KC_RPRN, CTRL_H, CTRL_J, CTRL_K, CTRL_L, KC_SCLN, XXXXXXX,
+        //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
+        XXXXXXX, KC_GRV, KC_BSLS, KC_PIPE, KC_TILD, KC_DQT, KC_PLUS, KC_COMM, KC_QUOT, KC_DOT, LALT_T(KC_SLSH), XXXXXXX,
+        //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
+        LCTL_T(KC_TAB), KC_LSFT, MO(_TERMINAL), _______, KC_BSPC, KC_LCMD
+        //`--------------------------'  `--------------------------'
+        ),
 
-                                                              [_FUNCTION] = LAYOUT_split_3x6_3(XXXXXXX, KC_F1, KC_F2, KC_F3, KC_F4, KC_F5, KC_F6, KC_F7, KC_F8, KC_F9, KC_F10, XXXXXXX, XXXXXXX, KC_F11, KC_F12, KC_BRID, KC_BRIU, KC_MUTE, KC_VOLD, KC_VOLU, KC_MPRV, KC_MPLY, KC_MNXT, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, LCMD(LSFT(KC_3)), LCMD(LSFT(KC_4)), LCMD(LSFT(KC_5)), XXXXXXX, KC_LCTL, XXXXXXX, XXXXXXX, KC_SPC, KC_BSPC, KC_LCMD)};
+    // ============================================================================
+    // FUNCTION LAYER - F-keys & Mac System Controls (Ergonomic Layout)
+    // ============================================================================
+    [_FUNCTION] = LAYOUT_split_3x6_3(
+        //,-----------------------------------------------------.                    ,-----------------------------------------------------.
+        XXXXXXX, KC_F1, KC_F2, KC_F3, KC_F4, KC_F5, KC_F6, KC_F7, KC_F8, KC_F9, KC_F10, XXXXXXX,
+        //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
+        XXXXXXX, KC_F11, KC_F12, KC_BRID, KC_BRIU, KC_MUTE, KC_VOLD, KC_VOLU, KC_MPRV, KC_MPLY, KC_MNXT, XXXXXXX,
+        //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
+        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, LCMD(LSFT(KC_3)), LCMD(LSFT(KC_4)), LCMD(LSFT(KC_5)), XXXXXXX,
+        //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
+        KC_LCTL, XXXXXXX, XXXXXXX, KC_SPC, KC_BSPC, KC_LCMD
+        //`--------------------------'  `--------------------------'
+        ),
 
+    // ============================================================================
+    // TERMINAL LAYER - Direct Terminal Control (LOWER + RAISE)
+    // Fixed for macOS Terminal/iTerm2/Kitty compatibility
+    // Left hand: Window/Tab/Split management | Right hand: Navigation
+    // ============================================================================
+    [_TERMINAL] = LAYOUT_split_3x6_3(
+        //,-----------------------------------------------------.                    ,-----------------------------------------------------.
+        XXXXXXX, TERM_TAB_1, TERM_TAB_2, TERM_TAB_3, TERM_TAB_4, TERM_TAB_5, TERM_SCROLL_UP, TERM_FONT_INC, TERM_FONT_DEC, TERM_FONT_RST, TERM_CLEAR_SCRN, XXXXXXX,
+        //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
+        XXXXXXX, TERM_NEW_TAB, TERM_SPLIT_H, TERM_SPLIT_V, TERM_NEXT_TAB, TERM_PREV_TAB, TERM_WIN_LEFT, TERM_WIN_DOWN, TERM_WIN_UP, TERM_WIN_RIGHT, TERM_SCROLL_DN, XXXXXXX,
+        //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
+        XXXXXXX, TERM_ZOOM, TERM_CLOSE_WIN, TERM_CLOSE_TAB, TERM_FULLSCREEN, XXXXXXX, TERM_HOME, TERM_PREV_WIN, TERM_NEXT_WIN, TERM_END, TERM_CLEAR_LINE, XXXXXXX,
+        //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
+        TG(_FUNCTION), _______, _______, _______, _______, KC_RSFT
+        //`--------------------------'  `--------------------------'
+        )};
+
+// ============================================================================
+// Layer State Management
+// ============================================================================
 layer_state_t layer_state_set_user(layer_state_t state) {
-    return state;
+    return update_tri_layer_state(state, _LOWER, _RAISE, _TERMINAL);
 }
 
 // ============================================================================
@@ -247,6 +357,185 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                     // Otherwise send } (right brace)
                     tap_code16(KC_RCBR);
                 }
+            }
+            return false;
+
+        // Terminal control keys - Fixed for macOS compatibility
+        case TERM_NEW_TAB:
+            if (record->event.pressed) {
+                tap_code16(LCMD(KC_T));
+            }
+            return false;
+
+        case TERM_CLOSE_TAB:
+            if (record->event.pressed) {
+                tap_code16(LCMD(KC_W));
+            }
+            return false;
+
+        case TERM_CLOSE_WIN:
+            if (record->event.pressed) {
+                tap_code16(LCMD(LSFT(KC_W)));
+            }
+            return false;
+
+        case TERM_NEXT_TAB:
+            if (record->event.pressed) {
+                tap_code16(LCMD(LSFT(KC_RBRC)));
+            }
+            return false;
+
+        case TERM_PREV_TAB:
+            if (record->event.pressed) {
+                tap_code16(LCMD(LSFT(KC_LBRC)));
+            }
+            return false;
+
+        case TERM_TAB_1:
+            if (record->event.pressed) {
+                tap_code16(LCMD(KC_1));
+            }
+            return false;
+
+        case TERM_TAB_2:
+            if (record->event.pressed) {
+                tap_code16(LCMD(KC_2));
+            }
+            return false;
+
+        case TERM_TAB_3:
+            if (record->event.pressed) {
+                tap_code16(LCMD(KC_3));
+            }
+            return false;
+
+        case TERM_TAB_4:
+            if (record->event.pressed) {
+                tap_code16(LCMD(KC_4));
+            }
+            return false;
+
+        case TERM_TAB_5:
+            if (record->event.pressed) {
+                tap_code16(LCMD(KC_5));
+            }
+            return false;
+
+        case TERM_SPLIT_H:
+            if (record->event.pressed) {
+                tap_code16(LCMD(KC_D));
+            }
+            return false;
+
+        case TERM_SPLIT_V:
+            if (record->event.pressed) {
+                tap_code16(LCMD(LSFT(KC_D)));
+            }
+            return false;
+
+        case TERM_WIN_LEFT:
+            if (record->event.pressed) {
+                tap_code16(LCMD(LALT(KC_LEFT)));
+            }
+            return false;
+
+        case TERM_WIN_DOWN:
+            if (record->event.pressed) {
+                tap_code16(LCMD(LALT(KC_DOWN)));
+            }
+            return false;
+
+        case TERM_WIN_UP:
+            if (record->event.pressed) {
+                tap_code16(LCMD(LALT(KC_UP)));
+            }
+            return false;
+
+        case TERM_WIN_RIGHT:
+            if (record->event.pressed) {
+                tap_code16(LCMD(LALT(KC_RIGHT)));
+            }
+            return false;
+
+        case TERM_NEXT_WIN:
+            if (record->event.pressed) {
+                tap_code16(LCMD(KC_RBRC));
+            }
+            return false;
+
+        case TERM_PREV_WIN:
+            if (record->event.pressed) {
+                tap_code16(LCMD(KC_LBRC));
+            }
+            return false;
+
+        case TERM_ZOOM:
+            if (record->event.pressed) {
+                // Toggle maximize for current pane (iTerm2/Kitty)
+                tap_code16(LCMD(LSFT(KC_ENT)));
+            }
+            return false;
+
+        case TERM_FULLSCREEN:
+            if (record->event.pressed) {
+                // macOS standard fullscreen toggle
+                tap_code16(LCTL(LCMD(KC_F)));
+            }
+            return false;
+
+        case TERM_SCROLL_UP:
+            if (record->event.pressed) {
+                tap_code(KC_PGUP);
+            }
+            return false;
+
+        case TERM_SCROLL_DN:
+            if (record->event.pressed) {
+                tap_code(KC_PGDN);
+            }
+            return false;
+
+        case TERM_HOME:
+            if (record->event.pressed) {
+                tap_code16(LCTL(KC_A));
+            }
+            return false;
+
+        case TERM_END:
+            if (record->event.pressed) {
+                tap_code16(LCTL(KC_E));
+            }
+            return false;
+
+        case TERM_CLEAR_LINE:
+            if (record->event.pressed) {
+                // Clear from cursor to end of line
+                tap_code16(LCTL(KC_K));
+            }
+            return false;
+
+        case TERM_CLEAR_SCRN:
+            if (record->event.pressed) {
+                // Clear screen and scrollback
+                tap_code16(LCMD(KC_K));
+            }
+            return false;
+
+        case TERM_FONT_INC:
+            if (record->event.pressed) {
+                tap_code16(LCMD(KC_PLUS));
+            }
+            return false;
+
+        case TERM_FONT_DEC:
+            if (record->event.pressed) {
+                tap_code16(LCMD(KC_MINS));
+            }
+            return false;
+
+        case TERM_FONT_RST:
+            if (record->event.pressed) {
+                tap_code16(LCMD(KC_0));
             }
             return false;
 
