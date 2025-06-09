@@ -1,21 +1,28 @@
-/*
-Copyright 2019 @foostan
-Copyright 2020 Drashna Jaelre <@drashna>
-Modified 2025 for Cygnus V1 - Ergonomic Dactyl Manuform Layout
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 2 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+// ============================================================================
+// Encoder Configuration (if present)
+// ============================================================================
+#ifdef ENCODER_MAP_ENABLE
+const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][NUM_DIRECTIONS] = {
+    [_BASE] = {ENCODER_CCW_CW(KC_VOLD, KC_VOLU)}, [_LOWER] = {ENCODER_CCW_CW(KC_PGUP, KC_PGDN)}, [_RAISE] = {ENCODER_CCW_CW(KC_BRID, KC_BRIU)}, [_FUNCTION] = {ENCODER_CCW_CW(KC_MPRV, KC_MNXT)}, [_TERMINAL] = {ENCODER_CCW_CW(KC_VOLD, KC_VOLU)},
+};
+#endif /*                                                                \
+ Copyright 2019 @foostan                                                 \
+ Copyright 2020 Drashna Jaelre <@drashna>                                \
+ Modified 2025 for Cygnus V1 - Ergonomic Dactyl Manuform Layout          \
+                                                                       \ \
+ This program is free software: you can redistribute it and/or modify    \
+ it under the terms of the GNU General Public License as published by    \
+ the Free Software Foundation, either version 2 of the License, or       \
+ (at your option) any later version.                                     \
+                                                                       \ \
+ This program is distributed in the hope that it will be useful,         \
+ but WITHOUT ANY WARRANTY; without even the implied warranty of          \
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the           \
+ GNU General Public License for more details.                            \
+                                                                       \ \
+ You should have received a copy of the GNU General Public License       \
+ along with this program.  If not, see <http://www.gnu.org/licenses/>.   \
+ */
 // qmk compile -kb crkbd -km cygnus_v1 -e CONVERT_TO=rp2040_ce -e EEPROM_CLEAR=yes
 #include QMK_KEYBOARD_H
 
@@ -24,21 +31,22 @@ enum layer_names { _BASE = 0, _LOWER, _RAISE, _FUNCTION, _TERMINAL };
 
 // Custom keycodes
 enum custom_keycodes {
-    P_SPOTLIGHT = SAFE_RANGE,
+    CTRL_SPC = SAFE_RANGE,
     CTRL_H,
     CTRL_J,
     CTRL_K,
     CTRL_L,
-    SYM_1, // ! normally, 1 when shifted
-    SYM_2, // @ normally, 2 when shifted
-    SYM_3, // # normally, 3 when shifted
-    SYM_4, // $ normally, 4 when shifted
-    SYM_5, // % normally, 5 when shifted
-    SYM_6, // ^ normally, 6 when shifted
-    SYM_7, // & normally, 7 when shifted
-    SYM_8, // * normally, 8 when shifted
-    SYM_9, // ( normally, 9 when shifted
-    SYM_0, // ) normally, 0 when shifted
+    SYM_1,     // ! only
+    W_AT,      // W normally, @ when shifted
+    SYM_3,     // # only
+    SYM_4,     // $ only
+    SYM_5,     // % only
+    SYM_6,     // ^ only
+    SYM_7,     // & only
+    SYM_8,     // * only
+    SYM_9,     // ( only
+    SYM_0,     // ) only
+    QUOT_APOS, // " normally, ' when shifted
 
     // Terminal control keycodes (fixed for macOS)
     TERM_NEW_TAB,
@@ -70,17 +78,17 @@ enum custom_keycodes {
     TERM_FONT_INC,
     TERM_FONT_DEC,
     TERM_FONT_RST,
+
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     // ============================================================================
     // BASE LAYER - QWERTY with Alt access and ergonomic improvements
     // Left thumb: TAB → SHIFT → ENTER | Right thumb: SPACE ← BACKSPACE ← CMD+ESC
-    // P key: Tap for P, Hold for CMD+SPACE (Spotlight)
     // ============================================================================
     [_BASE] = LAYOUT_split_3x6_3(
         //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-        XXXXXXX, KC_Q, KC_W, KC_E, KC_R, KC_T, KC_Y, KC_U, KC_I, KC_O, P_SPOTLIGHT, XXXXXXX,
+        XXXXXXX, KC_Q, KC_W, KC_E, KC_R, KC_T, KC_Y, KC_U, KC_I, KC_O, KC_P, XXXXXXX,
         //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
         XXXXXXX, KC_A, KC_S, KC_D, KC_F, KC_G, KC_H, KC_J, KC_K, KC_L, KC_SCLN, XXXXXXX,
         //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
@@ -106,19 +114,20 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         ),
 
     // ============================================================================
-    // RAISE LAYER - Programming Symbols with Numbers on Shift
-    // Top row: !@#$%^&*() - when shifted gives 1234567890
+    // RAISE LAYER - Programming Symbols (Numbers available in LOWER layer)
+    // Top row: !@#$%^&*() - symbols only
     // Punctuation: ,.;/ naturally shift to <>:? (NO duplicate symbols)
     // Backtick and tilde as separate keys in good positions
     // HJKL: Normal symbols, or arrow keys when Ctrl is held
+    // CTRL+SEMICOLON: Spotlight (CMD+SPACE) when Ctrl is held
     // ============================================================================
     [_RAISE] = LAYOUT_split_3x6_3(
         //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-        XXXXXXX, SYM_1, SYM_2, SYM_3, SYM_4, SYM_5, SYM_6, SYM_7, SYM_8, SYM_9, SYM_0, XXXXXXX,
+        XXXXXXX, SYM_1, W_AT, SYM_3, SYM_4, SYM_5, SYM_6, SYM_7, SYM_8, SYM_9, SYM_0, XXXXXXX,
         //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-        XXXXXXX, KC_EQL, KC_LBRC, KC_RBRC, KC_LPRN, KC_RPRN, CTRL_H, CTRL_J, CTRL_K, CTRL_L, KC_SCLN, XXXXXXX,
+        XXXXXXX, KC_EQL, KC_LBRC, KC_RBRC, KC_LPRN, KC_RPRN, CTRL_H, CTRL_J, CTRL_K, CTRL_L, CTRL_SPC, XXXXXXX,
         //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-        XXXXXXX, KC_GRV, KC_BSLS, KC_PIPE, KC_TILD, KC_DQT, KC_PLUS, KC_COMM, KC_QUOT, KC_DOT, LALT_T(KC_SLSH), XXXXXXX,
+        XXXXXXX, KC_GRV, KC_BSLS, KC_PIPE, KC_TILD, QUOT_APOS, KC_PLUS, KC_QUOT, KC_COMM, KC_DOT, LALT_T(KC_SLSH), XXXXXXX,
         //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
         LCTL_T(KC_TAB), KC_LSFT, MO(_TERMINAL), _______, KC_BSPC, KC_LCMD
         //`--------------------------'  `--------------------------'
@@ -141,8 +150,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     // ============================================================================
     // TERMINAL LAYER - Direct Terminal Control (LOWER + RAISE)
-    // Fixed for macOS Terminal/iTerm2/Kitty compatibility
-    // Left hand: Window/Tab/Split management | Right hand: Navigation
+    // Fixed for macOS Terminal/iTerm2/Kitty compatibility + Neovim split resizing
+    // Left hand: Window/Tab/Split management | Right hand: Navigation + Neovim
+    // Hold Shift + HJKL for Neovim split resizing
     // ============================================================================
     [_TERMINAL] = LAYOUT_split_3x6_3(
         //,-----------------------------------------------------.                    ,-----------------------------------------------------.
@@ -181,121 +191,104 @@ combo_t key_combos[] = {
 // ============================================================================
 // Custom Key Processing
 // ============================================================================
-static uint16_t p_spotlight_timer;
-
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
-        case P_SPOTLIGHT:
+        case CTRL_SPC:
             if (record->event.pressed) {
-                p_spotlight_timer = timer_read();
-            } else {
-                if (timer_elapsed(p_spotlight_timer) < TAPPING_TERM) {
-                    // Tap: send P
-                    tap_code(KC_P);
-                } else {
-                    // Hold: send CMD+SPACE
+                if (get_mods() & MOD_MASK_CTRL) {
+                    // Clear Ctrl modifier temporarily, send CMD+SPACE, then restore
+                    uint8_t mods = get_mods();
+                    clear_mods();
                     tap_code16(LCMD(KC_SPC));
+                    set_mods(mods);
+                } else {
+                    // Otherwise send semicolon
+                    tap_code(KC_SCLN);
                 }
             }
             return false;
 
-        // Symbol/Number keys - symbols by default, numbers when shifted
+        // Symbol keys - symbols only (numbers available in LOWER layer)
         case SYM_1:
             if (record->event.pressed) {
-                if (get_mods() & MOD_MASK_SHIFT) {
-                    tap_code(KC_1);
-                } else {
-                    tap_code16(KC_EXLM);
-                }
+                tap_code16(KC_EXLM); // !
             }
             return false;
 
-        case SYM_2:
+        case W_AT:
             if (record->event.pressed) {
                 if (get_mods() & MOD_MASK_SHIFT) {
-                    tap_code(KC_2);
-                } else {
+                    // Clear shift temporarily, send @, then restore
+                    uint8_t mods = get_mods();
+                    clear_mods();
                     tap_code16(KC_AT);
+                    set_mods(mods);
+                } else {
+                    // Send W
+                    tap_code(KC_W);
                 }
             }
             return false;
 
         case SYM_3:
             if (record->event.pressed) {
-                if (get_mods() & MOD_MASK_SHIFT) {
-                    tap_code(KC_3);
-                } else {
-                    tap_code16(KC_HASH);
-                }
+                tap_code16(KC_HASH); // #
             }
             return false;
 
         case SYM_4:
             if (record->event.pressed) {
-                if (get_mods() & MOD_MASK_SHIFT) {
-                    tap_code(KC_4);
-                } else {
-                    tap_code16(KC_DLR);
-                }
+                tap_code16(KC_DLR); // $
             }
             return false;
 
         case SYM_5:
             if (record->event.pressed) {
-                if (get_mods() & MOD_MASK_SHIFT) {
-                    tap_code(KC_5);
-                } else {
-                    tap_code16(KC_PERC);
-                }
+                tap_code16(KC_PERC); // %
             }
             return false;
 
         case SYM_6:
             if (record->event.pressed) {
-                if (get_mods() & MOD_MASK_SHIFT) {
-                    tap_code(KC_6);
-                } else {
-                    tap_code16(KC_CIRC);
-                }
+                tap_code16(KC_CIRC); // ^
             }
             return false;
 
         case SYM_7:
             if (record->event.pressed) {
-                if (get_mods() & MOD_MASK_SHIFT) {
-                    tap_code(KC_7);
-                } else {
-                    tap_code16(KC_AMPR);
-                }
+                tap_code16(KC_AMPR); // &
             }
             return false;
 
         case SYM_8:
             if (record->event.pressed) {
-                if (get_mods() & MOD_MASK_SHIFT) {
-                    tap_code(KC_8);
-                } else {
-                    tap_code16(KC_ASTR);
-                }
+                tap_code16(KC_ASTR); // *
             }
             return false;
 
         case SYM_9:
             if (record->event.pressed) {
-                if (get_mods() & MOD_MASK_SHIFT) {
-                    tap_code(KC_9);
-                } else {
-                    tap_code16(KC_LPRN);
-                }
+                tap_code16(KC_LPRN); // (
             }
             return false;
 
         case SYM_0:
             if (record->event.pressed) {
+                tap_code16(KC_RPRN); // )
+            }
+            return false;
+
+        case QUOT_APOS:
+            if (record->event.pressed) {
                 if (get_mods() & MOD_MASK_SHIFT) {
-                    tap_code(KC_0);
+                    // Clear shift temporarily, send ', then restore
+                    uint8_t mods = get_mods();
+                    clear_mods();
+                    tap_code(KC_QUOT);
+                    set_mods(mods);
                 } else {
-                    tap_code16(KC_RPRN);
+                    // Send "
+                    tap_code16(KC_DQT);
                 }
             }
             return false;
@@ -433,27 +426,42 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             }
             return false;
 
+        // ============================================================================
+        // NEOVIM SPLIT RESIZING (HJKL in terminal layer)
+        // ============================================================================
         case TERM_WIN_LEFT:
             if (record->event.pressed) {
-                tap_code16(LCMD(LALT(KC_LEFT)));
+                // Neovim: Resize split left (make current split narrower)
+                // Ctrl+w <
+                tap_code16(LCTL(KC_W));
+                tap_code16(LSFT(KC_COMM)); // < key
             }
             return false;
 
         case TERM_WIN_DOWN:
             if (record->event.pressed) {
-                tap_code16(LCMD(LALT(KC_DOWN)));
+                // Neovim: Resize split down (make current split shorter)
+                // Ctrl+w -
+                tap_code16(LCTL(KC_W));
+                tap_code(KC_MINS);
             }
             return false;
 
         case TERM_WIN_UP:
             if (record->event.pressed) {
-                tap_code16(LCMD(LALT(KC_UP)));
+                // Neovim: Resize split up (make current split taller)
+                // Ctrl+w +
+                tap_code16(LCTL(KC_W));
+                tap_code16(LSFT(KC_EQL)); // + key
             }
             return false;
 
         case TERM_WIN_RIGHT:
             if (record->event.pressed) {
-                tap_code16(LCMD(LALT(KC_RIGHT)));
+                // Neovim: Resize split right (make current split wider)
+                // Ctrl+w >
+                tap_code16(LCTL(KC_W));
+                tap_code16(LSFT(KC_DOT)); // > key
             }
             return false;
 
@@ -543,12 +551,3 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             return true;
     }
 }
-
-// ============================================================================
-// Encoder Configuration (if present)
-// ============================================================================
-#ifdef ENCODER_MAP_ENABLE
-const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][NUM_DIRECTIONS] = {
-    [_BASE] = {ENCODER_CCW_CW(KC_VOLD, KC_VOLU)}, [_LOWER] = {ENCODER_CCW_CW(KC_PGUP, KC_PGDN)}, [_RAISE] = {ENCODER_CCW_CW(KC_BRID, KC_BRIU)}, [_FUNCTION] = {ENCODER_CCW_CW(KC_MPRV, KC_MNXT)}, [_TERMINAL] = {ENCODER_CCW_CW(KC_VOLD, KC_VOLU)},
-};
-#endif
